@@ -1,3 +1,5 @@
+using Dojo
+
 nq = 7
 nv = 6
 nx = nq + nv
@@ -18,8 +20,8 @@ function attitude_jacobian(q)
 	s = q[1]
 	v = q[2:4]
 
-	[-transpose(v);
-	 s * I + skew(v)]
+	[-Dojo.transpose(v);
+	 s * I + Dojo.skew(v)]
 end
 
 function G_func(q)
@@ -72,14 +74,14 @@ function kinematics(q)
 				  p8])
 end
 
-ϕ(x1)
-
 function ϕ(q)
 	k = kinematics(q)
 	idx = collect([3, 6, 9, 12, 15, 18, 21, 24])
 
 	return k[idx]
 end
+
+ϕ(x1)
 
 P(q) = ForwardDiff.jacobian(kinematics, q) * G_func(q)
 N(q) = ForwardDiff.jacobian(ϕ, q) * G_func(q)
@@ -104,8 +106,8 @@ function L_multiply(q)
 	s = q[1]
 	v = q[2:4]
 
-	SMatrix{4,4}([s -transpose(v);
-	              v s * I + skew(v)])
+	SMatrix{4,4}([s -Dojo.transpose(v);
+	              v s * I + Dojo.skew(v)])
 end
 
 softminus(1.0)
@@ -152,15 +154,15 @@ for t = 1:T-1
 	push!(x_hist, dynamics(x_hist[end], nothing, t))
 	# println(ϕ(x_hist[end][1:nq]))
 end
-visualize!(vis, x_hist, Δt = h)
+#visualize!(vis, x_hist, Δt = h)
 
 x_hist[end]
 # plot(hcat(x_hist...)[1:2, :]', )
 
-# include(joinpath(pwd(), "models/visualize.jl"))
-# vis = Visualizer()
-# render(vis)
-# visualize!(vis, x_hist, Δt = h)
+include(joinpath(models_path,"visualize.jl"))
+vis = Visualizer()
+render(vis)
+visualize!(vis, x_hist, Δt = h)
 #
 # function visualize!(vis, q;
 #         Δt = 0.1)

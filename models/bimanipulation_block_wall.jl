@@ -1,3 +1,9 @@
+using StaticArrays
+using LinearAlgebra
+using GeometryBasics
+using Dojo
+using MeshCat
+
 """
     bimanual block
         particle with contacts at each corner
@@ -304,46 +310,46 @@ model = BimanipulationBlockV2{Discrete, FixedTime}(n, m, d,
             idx_s)
 
 
-function visualize!(vis, model::BimanipulationBlockV2, q, u; r = r,
+function visualize!(vis::Visualizer, model::BimanipulationBlockV2, q, u; r = r,
         Δt = 0.1)
 
 	default_background!(vis)
 
-    setobject!(vis["box"], GeometryBasics.Rect(Vec(-1.0 * r,
+    Dojo.setobject!(vis["box"], GeometryBasics.Rect(Vec(-1.0 * r,
 		-1.0 * r,
 		-1.0 * r),
 		Vec(2.0 * r, 2.0 * r, 2.0 * r)),
-		MeshPhongMaterial(color = RGBA(0.0, 0.0, 0.0, 1.0)))
+		Dojo.MeshPhongMaterial(color = RGBA(0.0, 0.0, 0.0, 1.0)))
 
-    setobject!(vis["pusher1"], Sphere(Point3f0(0),
+	Dojo.setobject!(vis["pusher1"], GeometryBasics.Sphere(Point3f0(0),
         convert(Float32, 0.01)),
-        MeshPhongMaterial(color = RGBA(1.0, 0.0, 0, 1.0)))
+        Dojo.MeshPhongMaterial(color = RGBA(1.0, 0.0, 0, 1.0)))
 
-    # setobject!(vis["pusher2"], Sphere(Point3f0(0),
+    # Dojo.setobject!(vis["pusher2"], Sphere(Point3f0(0),
     #     convert(Float32, 0.01)),
-    #     MeshPhongMaterial(color = RGBA(1.0, 0.0, 0, 1.0)))
+    #     Dojo.MeshPhongMaterial(color = RGBA(1.0, 0.0, 0, 1.0)))
 
     # for i = 1:4
-    #     setobject!(vis["contact$i"], GeometryBasics.Sphere(Point3f0(0),
+    #     Dojo.setobject!(vis["contact$i"], GeometryBasics.Sphere(Point3f0(0),
     #         convert(Float32, 0.02)),
-    #         MeshPhongMaterial(color = RGBA(1.0, 165.0 / 255.0, 0.0, 1.0)))
+    #         Dojo.MeshPhongMaterial(color = RGBA(1.0, 165.0 / 255.0, 0.0, 1.0)))
     # end
 
 	# force_vis1 = ArrowVisualizer(vis[:force1])
-	# setobject!(force_vis1, MeshPhongMaterial(color=RGBA(1.0, 0.0, 0.0, 1.0)))
+	# setobject!(force_vis1, Dojo.MeshPhongMaterial(color=RGBA(1.0, 0.0, 0.0, 1.0)))
     #
 	# us = u[1] / 2.0
     #
-	# settransform!(force_vis1,
+	# Dojo.settransform!(force_vis1,
 	# 			Point(q[1][4] - us[1], 0, q[1][5] - us[1]),
 	# 			Vec(us[1], 0, us[2]),
 	# 			shaft_radius=0.01,
 	# 			max_head_radius=0.025)
     #
 	# force_vis2 = ArrowVisualizer(vis[:force2])
-	# setobject!(force_vis2, MeshPhongMaterial(color=RGBA(1.0, 0.0, 0.0, 1.0)))
+	# setobject!(force_vis2, Dojo.MeshPhongMaterial(color=RGBA(1.0, 0.0, 0.0, 1.0)))
     #
-	# settransform!(force_vis2,
+	# Dojo.settransform!(force_vis2,
 	# 			Point(q[1][6] - us[3], 0, q[1][7] - us[4]),
 	# 			Vec(us[3], 0, us[4]),
 	# 			shaft_radius=0.01,
@@ -386,29 +392,29 @@ function visualize!(vis, model::BimanipulationBlockV2, q, u; r = r,
 				# end
 			end
 
-            settransform!(vis["box"],
-				compose(Translation(q[t+1][1], 0.0, q[t+1][2]), LinearMap(RotY(q[t+1][3]))))
+            Dojo.settransform!(vis["box"],
+				Dojo.compose(Dojo.Translation(q[t+1][1], 0.0, q[t+1][2]), Dojo.LinearMap(Dojo.RotY(q[t+1][3]))))
 
-            settransform!(vis["pusher1"],
-				compose(Translation(q[t+1][4], 0.0, q[t+1][5]), LinearMap(RotY(0.0))))
+			Dojo.settransform!(vis["pusher1"],
+				Dojo.compose(Dojo.Translation(q[t+1][4], 0.0, q[t+1][5]), Dojo.LinearMap(Dojo.RotY(0.0))))
 
-            # settransform!(vis["pusher2"],
-            #     compose(Translation(q[t+1][6], 0.0, q[t+1][7]), LinearMap(RotY(0.0))))
+            # Dojo.settransform!(vis["pusher2"],
+            #     Dojo.compose(Dojo.Translation(q[t+1][6], 0.0, q[t+1][7]), Dojo.LinearMap(Dojo.RotY(0.0))))
             #
             # for i = 1:4
-            #     settransform!(vis["contact$i"],
-            #         Translation(([q[t+1][1]; 0.0; q[t+1][2]] + RotY(q[t+1][3]) * [contact_corner_offset[i][1]; 0.0; contact_corner_offset[i][2];])...))
+            #     Dojo.settransform!(vis["contact$i"],
+            #         Dojo.Translation(([q[t+1][1]; 0.0; q[t+1][2]] + Dojo.RotY(q[t+1][3]) * [contact_corner_offset[i][1]; 0.0; contact_corner_offset[i][2];])...))
             # end
         end
     end
 
-	settransform!(vis["/Cameras/default"],
-		compose(Translation(0.0, -90.0, -1.0),LinearMap(RotZ(pi / 2.0))))
-	setprop!(vis["/Cameras/default/rotated/<object>"], "zoom", 75)
+	Dojo.settransform!(vis["/Cameras/default"],
+		Dojo.compose(Dojo.Translation(0.0, -90.0, -1.0),Dojo.LinearMap(Dojo.RotZ(pi / 2.0))))
+	Dojo.setprop!(vis["/Cameras/default/rotated/<object>"], "zoom", 75)
 
-    setobject!(vis["wall"],
-        Rect(Vec(0, 0, 0),Vec(2 * r, 1.0, 4 * r)), MeshPhongMaterial(color = RGBA(0.7, 0.7, 0.7, 1.0)))
-    settransform!(vis["wall"], Translation(2 * r, 0.0, 0.0))
+    Dojo.setobject!(vis["wall"],
+		Dojo.Rect(Dojo.Vec(0, 0, 0),Dojo.Vec(2 * r, 1.0, 4 * r)), Dojo.MeshPhongMaterial(color = Dojo.RGBA(0.7, 0.7, 0.7, 1.0)))
+	Dojo.settransform!(vis["wall"], Dojo.Translation(2 * r, 0.0, 0.0))
 
     MeshCat.setanimation!(vis, anim)
 end

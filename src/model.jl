@@ -27,7 +27,7 @@ abstract type Model{I <: Integration, T <: Time} end
 	control_output(model, u) = u
 """
 
-include_model(str::String) = include(joinpath(pwd(), "models", str * ".jl"))
+include_model(str::String) = include(joinpath(pwd(), "motion_planning", "models", str * ".jl"))
 
 """
 	propagate dynamics with implicit integrator

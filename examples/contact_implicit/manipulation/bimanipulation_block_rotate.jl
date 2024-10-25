@@ -1,4 +1,20 @@
 using Plots
+using ForwardDiff
+
+src_path = joinpath(pwd(), "motion_planning", "src")
+models_path = joinpath(pwd(), "motion_planning", "models")
+include(joinpath(src_path, "time.jl"))
+include(joinpath(src_path, "model.jl"))
+include(joinpath(src_path, "objective.jl"))
+include(joinpath(src_path, "integration.jl"))
+include(joinpath(src_path, "constraints.jl"))
+include(joinpath(src_path, "problem.jl"))
+include(joinpath(src_path, "utils.jl"))
+include(joinpath(src_path, "indices.jl"))
+include(joinpath(src_path, "moi.jl"))
+include(joinpath(src_path, "objectives", "penalty.jl"))
+include(joinpath(src_path, "objectives", "quadratic.jl"))
+include(joinpath(src_path, "constraints", "dynamics.jl"))
 
 # Model
 include_model("bimanipulation_block_wall")
@@ -85,7 +101,7 @@ z0 = pack(x0, u0, prob)
 
 #NOTE: may need to run examples multiple times to get good trajectories
 # Solve nominal problem
-@time z̄, info = solve(prob, copy(z0), tol = 1.0e-2, c_tol = 1.0e-2, max_iter=2500)
+@time z̄, info = solve(prob, copy(z0), tol = 1.0e-2, c_tol = 1.0e-2, max_iter=10) #2500
 
 check_slack(z̄, prob)
 x̄, ū = unpack(z̄, prob)
@@ -95,7 +111,7 @@ u = [u[model.idx_u] for u in ū]
 b = [u[model.idx_b] for u in ū]
 h̄ = h
 
-include(joinpath(pwd(), "models/visualize.jl"))
+include(joinpath(models_path, "visualize.jl"))
 vis = Visualizer()
 render(vis)
 # open(vis)

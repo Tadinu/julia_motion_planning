@@ -1,3 +1,5 @@
+using ForwardDiff
+
 """
     finite-difference control velocity objective
 """

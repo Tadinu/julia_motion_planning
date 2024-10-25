@@ -26,7 +26,8 @@ function objective_gradient!(∇J, Z, obj::MultiObjective, idx, T)
 end
 
 function include_objective(str::String)
-    include(joinpath(pwd(), "src/objectives", str * ".jl"))
+    print(joinpath(pwd(), "motion_planning", "src", "objectives", str * ".jl"))
+    include(joinpath(pwd(), "motion_planning", "src", "objectives", str * ".jl"))
 end
 
 function include_objective(strs::Vector{String})

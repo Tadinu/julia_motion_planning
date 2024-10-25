@@ -1,4 +1,20 @@
 using Plots
+using ForwardDiff
+
+src_path = joinpath(pwd(), "motion_planning", "src")
+models_path = joinpath(pwd(), "motion_planning", "models")
+include(joinpath(src_path, "time.jl"))
+include(joinpath(src_path, "model.jl"))
+include(joinpath(src_path, "objective.jl"))
+include(joinpath(src_path, "integration.jl"))
+include(joinpath(src_path, "constraints.jl"))
+include(joinpath(src_path, "problem.jl"))
+include(joinpath(src_path, "utils.jl"))
+include(joinpath(src_path, "indices.jl"))
+include(joinpath(src_path, "moi.jl"))
+include(joinpath(src_path, "objectives", "penalty.jl"))
+include(joinpath(src_path, "objectives", "quadratic.jl"))
+include(joinpath(src_path, "constraints", "dynamics.jl"))
 
 # Model
 include_model("bimanipulation_block")
@@ -48,6 +64,7 @@ _ul[model.idx_u] .= -Inf
 _ul[model.idx_u] .= 0.0
 _uu[model.idx_u] .= 0.0
 
+t = 1
 _ul[model.idx_u[9:10]] = x0[t][nq .+ (1:2)] + model.control_input_offset[1]
 _ul[model.idx_u[11:12]] = x0[t][nq .+ (1:2)] + model.control_input_offset[3]
 _ul[model.idx_u[1:2]] = [-10.0; 0.5 * model.mass * model.g * h]
@@ -280,7 +297,7 @@ u = [u[model.idx_u] for u in ū]
 b = [u[model.idx_b] for u in ū]
 h̄ = h
 
-include(joinpath(pwd(), "models/visualize.jl"))
+include(joinpath(models_path, "visualize.jl"))
 vis = Visualizer()
 render(vis)
 # open(vis)

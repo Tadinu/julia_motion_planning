@@ -1,3 +1,5 @@
+using Dojo
+
 function cable_transform(y, z)
     v1 = [0.0, 0.0, 1.0]
     # if norm(z) > norm(y)
@@ -57,11 +59,11 @@ function select_material(material_path::String)
     return mtl
 end
 
-function default_background!(vis)
-    setvisible!(vis["/Background"], true)
-    setprop!(vis["/Background"], "top_color", RGBA(1.0, 1.0, 1.0, 1.0))
-    setprop!(vis["/Background"], "bottom_color", RGBA(1.0, 1.0, 1.0, 1.0))
-    setvisible!(vis["/Axes"], false)
+function default_background!(vis::Visualizer)
+    Dojo.setvisible!(vis["/Background"], true)
+    Dojo.setprop!(vis["/Background"], "top_color", RGBA(1.0, 1.0, 1.0, 1.0))
+    Dojo.setprop!(vis["/Background"], "bottom_color", RGBA(1.0, 1.0, 1.0, 1.0))
+    Dojo.setvisible!(vis["/Axes"], false)
 end
 
 function pad_trajectory(x, shift, T_shift)

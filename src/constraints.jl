@@ -96,7 +96,7 @@ function constraints_sparsity(con::MultiConstraints, model, idx, T;
 end
 
 function include_constraints(str::String)
-    include(joinpath(pwd(), "src/constraints", str * ".jl"))
+    include(joinpath(pwd(), "motion_planning", "src", "constraints", str * ".jl"))
 end
 
 function include_constraints(strs::Vector{String})
